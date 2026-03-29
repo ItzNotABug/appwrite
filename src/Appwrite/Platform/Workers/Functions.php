@@ -95,20 +95,23 @@ class Functions extends Action
             $user = $dbForProject->getDocument('users', $userId);
         }
 
+        if ($project->getId() === 'console') {
+            return;
+        }
+
+        // Always fetch function to get latest environment variables
+        if (!empty($functionId)) {
+            $function = $dbForProject->getDocument('functions', $functionId);
+        } elseif (!$function->isEmpty()) {
+            $function = $dbForProject->getDocument('functions', $function->getId());
+        }
+
         if (empty($jwt) && !$user->isEmpty()) {
             $jwtExpiry = $function->getAttribute('timeout', 900) + 60; // 1min extra to account for possible cold-starts
             $jwtObj = new JWT(System::getEnv('_APP_OPENSSL_KEY_V1'), 'HS256', $jwtExpiry, 0);
             $jwt = $jwtObj->encode([
                 'userId' => $user->getId(),
             ]);
-        }
-
-        if ($project->getId() === 'console') {
-            return;
-        }
-
-        if ($function->isEmpty() && !empty($functionId)) {
-            $function = $dbForProject->getDocument('functions', $functionId);
         }
 
         $log->addTag('functionId', $function->getId());

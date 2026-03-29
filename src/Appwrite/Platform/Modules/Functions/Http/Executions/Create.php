@@ -308,7 +308,7 @@ class Create extends Base
                 $queueForFunctions
                     ->setType('http')
                     ->setExecution($execution)
-                    ->setFunction($function)
+                    ->setFunctionId($function->getId())
                     ->setBody($body)
                     ->setHeaders($headers)
                     ->setPath($path)
