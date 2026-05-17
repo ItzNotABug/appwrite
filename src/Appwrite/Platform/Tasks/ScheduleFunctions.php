@@ -102,7 +102,7 @@ class ScheduleFunctions extends ScheduleBase
 
                     $queueForFunctions
                         ->setType('schedule')
-                        ->setFunction($schedule['resource'])
+                        ->setFunctionId($schedule['resource']->getId())
                         ->setMethod('POST')
                         ->setPath('/')
                         ->setProject($schedule['project']);
